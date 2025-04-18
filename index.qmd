@@ -1,0 +1,13 @@
+---
+title: "Your Name"
+image: "files/profile_pic.png"
+about:
+  template: jolla
+  links:
+    - icon: envelope
+      href: Sumedh.Hambarde@rady.ucsd.edu
+    - icon: linkedin
+      href: https://www.linkedin.com/in/rady-sumedh/
+---
+
+Welcome to my website!

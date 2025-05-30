@@ -427,8 +427,8 @@ np.random.seed(42)
 random.seed(42)
 
 # MCMC parameters as per assignment requirements
-num_mcmc_steps = 1100
-mcmc_burn_in = 100  # Number of initial samples to discard
+num_mcmc_steps = 11000
+mcmc_burn_in = 1000  # Number of initial samples to discard
 num_retained_samples = num_mcmc_steps - mcmc_burn_in
 
 # Initial values for the MCMC chain (using MLE estimates from Section 4 for warm start)
@@ -467,7 +467,7 @@ for step_i in range(num_mcmc_steps):
     # Store a copy of the current state of the parameters (whether accepted or rejected)
     mcmc_chain_samples.append(current_params.copy())
     # Print progress updates every 1000 steps
-    if (step_i + 1) % 100 == 0:
+    if (step_i + 1) % 1000 == 0:
         print(
             f"  Step {step_i + 1}/{num_mcmc_steps} completed. Current parameters: {current_params}"
         )

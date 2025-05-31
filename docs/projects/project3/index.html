@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Your Name">
+<meta name="author" content="Sumedh Hambarde">
 <meta name="dcterms.date" content="2025-05-30">
 
 <title>Multinomial Logit Model – Sumedh’s Blog</title>
@@ -201,7 +201,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Your Name </p>
+             <p>Sumedh Hambarde </p>
           </div>
   </div>
     
@@ -408,7 +408,7 @@ df_prep DataFrame prepared for estimation.</code></pre>
 </section>
 <section id="estimation-via-maximum-likelihood" class="level2">
 <h2 class="anchored" data-anchor-id="estimation-via-maximum-likelihood">4. Estimation via Maximum Likelihood</h2>
-<p><em>todo: Code up the log-likelihood function.</em> ::: {.cell}</p>
+<div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
@@ -573,17 +573,11 @@ Netflix (vs. Hulu)                   1.0000
    Ads (vs. No Ad)                  -0.8000
              Price                  -0.1000</code></pre>
 </div>
-<p>:::</p>
+</div>
 <p>As the results indicate, the estimated parameters are remarkably close to the true parameters used in the data simulation. For instance, my MLE estimate for Netflix (0.9412) is very close to its true value of 1.0, and similar accuracy is observed for Prime (0.5016 vs.&nbsp;0.5), Ads (-0.7320 vs.&nbsp;-0.8), and Price (-0.0995 vs.&nbsp;-0.1). The narrow confidence intervals (e.g., for Netflix, the 95% CI is [0.7222, 1.1602]) suggest a precise estimation, which is expected given the controlled nature of simulated data. This strong alignment validates the MLE approach for accurately recovering underlying preferences in a Multinomial Logit framework.</p>
 </section>
 <section id="estimation-via-bayesian-methods" class="level2">
 <h2 class="anchored" data-anchor-id="estimation-via-bayesian-methods">5. Estimation via Bayesian Methods</h2>
-<p><em>todo: code up a metropolis-hasting MCMC sampler of the posterior distribution. Take 11,000 steps and throw away the first 1,000, retaining the subsequent 10,000.</em></p>
-<p><em>hint: Use N(0,5) priors for the betas on the binary variables, and a N(0,1) prior for the price beta.</em></p>
-<p>_hint: instead of calculating post=lik*prior, you can work in the log-space and calculate log-post = log-lik + log-prior (this should enable you to re-use your log-likelihood function from the MLE section just above)_</p>
-<p><em>hint: King Markov (in the video) use a candidate distribution of a coin flip to decide whether to move left or right among his islands. Unlike King Markov, we have 4 dimensions (because we have 4 betas) and our dimensions are continuous. So, use a multivariate normal distribution to pospose the next location for the algorithm to move to. I recommend a MNV(mu, Sigma) where mu=c(0,0,0,0) and sigma has diagonal values c(0.05, 0.05, 0.05, 0.005) and zeros on the off-diagonal. Since this MVN has no covariances, you can sample each dimension independently (so 4 univariate normals instead of 1 multivariate normal), where the first 3 univariate normals are N(0,0.05) and the last one if N(0,0.005).</em></p>
-<p><em>todo: for at least one of the 4 parameters, show the trace plot of the algorithm, as well as the histogram of the posterior distribution.</em></p>
-<p><em>todo: report the 4 posterior means, standard deviations, and 95% credible intervals and compare them to your results from the Maximum Likelihood approach.</em></p>
 <p>Beyond Maximum Likelihood Estimation, I also employed a Bayesian approach to estimate the Multinomial Logit model parameters. The Bayesian framework allows for the incorporation of prior beliefs about the parameters, which are then updated with evidence from the observed data to form a posterior distribution. This posterior distribution provides a comprehensive summary of our uncertainty about the parameters.</p>
 <p>I implemented a <strong>Metropolis-Hastings Markov Chain Monte Carlo (MCMC)</strong> sampler to draw samples from this posterior distribution. The core components of my Bayesian model were:</p>
 <ol type="1">
@@ -877,11 +871,14 @@ Netflix (vs. Hulu)       0.938478      0.103981   [0.7361, 1.1671]        0.9412
              Price      -0.099474      0.006386 [-0.1123, -0.0862]       -0.0995       0.0063 [-0.1118, -0.0872]</code></pre>
 </div>
 </div>
+<p>The <strong>trace plot</strong> (which you saw for ‘Beta_Price’) visually confirms that my MCMC chain explored the parameter space effectively. The values for Beta_Price fluctuated randomly around a stable mean, indicating good mixing and strong convergence of the sampler. The <strong>posterior distribution histogram</strong> for ‘Beta_Price’ further illustrated this, showing a clear bell-shaped distribution centered very close to the true value of -0.1, which confirms the algorithm successfully sampled the true underlying utility for price.</p>
+<p>Looking at the <strong>Bayesian Posterior Summary Statistics</strong>, the posterior means for my parameters are: Netflix (0.9385), Prime (0.5037), Ads (-0.7304), and Price (-0.0995). These values are remarkably close to the true parameters used in the simulation (Netflix: 1.0, Prime: 0.5, Ads: -0.8, Price: -0.1), indicating accurate recovery of the underlying preferences. The standard deviations (e.g., Netflix: 0.1040, Price: 0.0064) show the precision of these estimates, and the 95% credible intervals (e.g., Price: [-0.1123, -0.0862]) provide a clear range of plausible values for each parameter.</p>
+<p>Comparing these Bayesian MCMC results with my Maximum Likelihood Estimates (MLE), a strong consistency is evident. The Bayesian posterior means are almost identical to the MLE point estimates, and their respective 95% credible and confidence intervals largely overlap. This close alignment is expected in models with sufficient data where the likelihood dominates the prior. Both estimation methodologies consistently reveal that consumers prefer Netflix over Hulu (the reference brand), show a positive preference for Amazon Prime over Hulu, exhibit a clear disutility when advertisements are present, and strongly prefer lower prices. This convergence across two distinct estimation paradigms provides robust insights into consumer preferences for streaming service attributes.</p>
 </section>
 <section id="discussion" class="level2">
 <h2 class="anchored" data-anchor-id="discussion">6. Discussion</h2>
-<p><em>todo: Suppose you did not simulate the data. What do you observe about the parameter estimates? What does <span class="math inline">\(\beta_\text{Netflix} &gt; \beta_\text{Prime}\)</span> mean? Does it make sense that <span class="math inline">\(\beta_\text{price}\)</span> is negative?</em></p>
-<p><em>todo: At a high level, discuss what change you would need to make in order to simulate data from — and estimate the parameters of — a multi-level (aka random-parameter or hierarchical) model. This is the model we use to analyze “real world” conjoint data.</em></p>
+<p>Having completed both Maximum Likelihood Estimation and Bayesian MCMC analysis of the conjoint data, several key observations can be made about the parameter estimates, assuming this were real-world data rather than simulated. First, consistently across both estimation methods, the parameter estimates provided clear insights into consumer preferences. For instance, my results showed β Netflix to be approximately 0.94 and β Prime to be around 0.50 (when compared to Hulu as the reference brand). This means that, all else being equal, consumers derive significantly more utility (or have a stronger preference) for Netflix than for Amazon Prime, and both are preferred over Hulu. This quantitative ranking of brand preferences is crucial for strategic branding and competitive positioning. Furthermore, the estimated β price was consistently negative, approximately -0.099. This absolutely makes sense; a negative coefficient for price indicates that as the price of a streaming service increases, the utility consumers receive from it decreases. This aligns perfectly with economic theory and common consumer behavior: people generally prefer lower prices. The magnitude implies that a one-unit increase in price reduces utility by about 0.099 units.</p>
+<p>If we were to move beyond this simulated data to analyze “real world” conjoint data, a significant conceptual shift would be required, specifically towards a multi-level (also known as random-parameter or hierarchical) model. In real-world scenarios, consumer preferences are rarely fixed across the entire population; instead, they vary from person to person. To simulate such data, instead of drawing all choices from a single population-level β vector, we would first draw individual-specific βi vectors from a population distribution (e.g., a multivariate normal distribution characterized by a population mean and a covariance matrix). Then, each individual’s choices would be generated using their unique βi ​. To estimate the parameters of such a model, our analytical approach would need to transition from estimating a single fixed β to estimating the parameters of the distribution of <span class="math inline">\(\beta_i\)</span>s (i.e., the population mean preference and the variance/covariance of preferences across consumers). This often involves more advanced estimation techniques, such as Maximum Simulated Likelihood in a frequentist framework or, more commonly, Hierarchical Bayesian MCMC models, which naturally estimate these individual-level random effects and their population-level distributions.</p>
 
 
 </section>

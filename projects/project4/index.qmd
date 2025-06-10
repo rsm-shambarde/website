@@ -1,10 +1,9 @@
 ---
-title: "Demystifying ML in Marketing: K-Means, KNN & Key Driver Analysis Explained"
+title: "Demystifying ML in Marketing: K-Means and KNN"
 author: "Sumedh Hambarde"
 date: today
 ---
 
-_todo: do two analyses.  Do one of either 1a or 1b, AND one of either 2a or 2b._
 
 
 ## 1. K-Means
@@ -411,56 +410,354 @@ Considering both metrics, there's a slight divergence but a strong indicator fro
 Our journey into unsupervised machine learning commenced with the implementation of the K-Means clustering algorithm from scratch, applied to the Palmer Penguins dataset using bill_length_mm and flipper_length_mm. Through this hands-on coding and subsequent visualization of the algorithm's iterative convergence, we gained a clear understanding of how K-Means dynamically groups data points. We then validated our custom implementation by comparing its results to Scikit-learn's optimized KMeans function, confirming their consistency. To ascertain the optimal number of clusters (K), we analyzed the Elbow Method (WCSS) and Silhouette Scores across a range of K values, with the Silhouette Score ultimately providing a strong indication that K=2 is the most appropriate choice for distinguishing natural groups within our penguin data based on these morphological features.
 
 
+## 2. K Nearest Neighbors
 
 
+```{python}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 
-## 1b. Latent-Class MNL
+# Generate the synthetic dataset
+np.random.seed(42) # Set seed for reproducibility
+n = 100 # Number of data points
 
-_todo: Use the Yogurt dataset to estimate a latent-class MNL model. This model was formally introduced in the paper by Kamakura & Russell (1989); you may want to read or reference page 2 of the pdf, which is described in the class slides, session 4, slides 56-57._
+x1 = np.random.uniform(-3, 3, n)
+x2 = np.random.uniform(-3, 3, n)
 
-_The data provides anonymized consumer identifiers (`id`), a vector indicating the chosen product (`y1`:`y4`), a vector indicating if any products were "featured" in the store as a form of advertising (`f1`:`f4`), and the products' prices in price-per-ounce (`p1`:`p4`). For example, consumer 1 purchased yogurt 4 at a price of 0.079/oz and none of the yogurts were featured/advertised at the time of consumer 1's purchase.  Consumers 2 through 7 each bought yogurt 2, etc. You may want to reshape the data from its current "wide" format into a "long" format._
+# Define the wiggly boundary
+boundary = np.sin(4 * x1) + x1
+y = np.where(x2 > boundary, 1, 0) # y is 1 if x2 > boundary, 0 otherwise
 
-_todo: Fit the standard MNL model on these data.  Then fit the latent-class MNL on these data separately for 2, 3, 4, and 5 latent classes._
+# Create a DataFrame
+synthetic_data = pd.DataFrame({'x1': x1, 'x2': x2, 'y': y})
 
-_todo: How many classes are suggested by the $BIC = -2*\ell_n  + k*log(n)$? (where $\ell_n$ is the log-likelihood, $n$ is the sample size, and $k$ is the number of parameters.) The Bayesian-Schwarz Information Criterion [link](https://en.wikipedia.org/wiki/Bayesian_information_criterion) is a metric that assess the benefit of a better log likelihood at the expense of additional parameters to estimate -- akin to the adjusted R-squared for the linear regression model. Note, that a **lower** BIC indicates a better model fit, accounting for the number of parameters in the model._
+print("First 5 rows of the synthetic dataset:")
+print(synthetic_data.head())
 
-_todo: compare the parameter estimates between (1) the aggregate MNL, and (2) the latent-class MNL with the number of classes suggested by the BIC._
-
-
-
-## 2a. K Nearest Neighbors
-
-_todo: use the following code (or the python equivalent) to generate a synthetic dataset for the k-nearest neighbors algorithm.  The code generates a dataset with two features, `x1` and `x2`, and a binary outcome variable `y` that is determined by whether `x2` is above or below a wiggly boundary defined by a sin function._
-
-```{r}
-# gen data -----
-set.seed(42)
-n <- 100
-x1 <- runif(n, -3, 3)
-x2 <- runif(n, -3, 3)
-x <- cbind(x1, x2)
-
-# define a wiggly boundary
-boundary <- sin(4*x1) + x1
-y <- ifelse(x2 > boundary, 1, 0) |> as.factor()
-dat <- data.frame(x1 = x1, x2 = x2, y = y)
+print(f"\nShape of the synthetic dataset: {synthetic_data.shape}")
+print(f"Counts of classes in 'y':\n{synthetic_data['y'].value_counts()}")
 ```
 
-_todo: plot the data where the horizontal axis is `x1`, the vertical axis is `x2`, and the points are colored by the value of `y`.  You may optionally draw the wiggly boundary._
 
-_todo: generate a test dataset with 100 points, using the same code as above but with a different seed._
+```{python}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 
-_todo: implement KNN by hand.  Check you work with a built-in function -- eg, `class::knn()` or `caret::train(method="knn")` in R, or scikit-learn's `KNeighborsClassifier` in Python._
+# Regenerate the synthetic dataset (due to independent code blocks)
+np.random.seed(42) # Set seed for reproducibility
+n = 100 # Number of data points
 
-_todo: run your function for k=1,...,k=30, each time noting the percentage of correctly-classified points from the test dataset. Plot the results, where the horizontal axis is 1-30 and the vertical axis is the percentage of correctly-classified points. What is the optimal value of k as suggested by your plot?_ 
+x1 = np.random.uniform(-3, 3, n)
+x2 = np.random.uniform(-3, 3, n)
+
+# Define the wiggly boundary (original function for y)
+boundary = np.sin(4 * x1) + x1
+y = np.where(x2 > boundary, 1, 0) # y is 1 if x2 > boundary, 0 otherwise
+
+synthetic_data = pd.DataFrame({'x1': x1, 'x2': x2, 'y': y})
+
+# --- Plotting the synthetic data ---
+plt.figure(figsize=(9, 7))
+
+# Plot points colored by class 'y'
+scatter = plt.scatter(synthetic_data['x1'], synthetic_data['x2'],
+                      c=synthetic_data['y'], cmap='viridis', s=50, alpha=0.8,
+                      label='Data Points')
+
+# Create a smooth line for the wiggly boundary for visualization
+x1_boundary = np.linspace(-3, 3, 500) # More points for a smoother curve
+y_boundary = np.sin(4 * x1_boundary) + x1_boundary
+plt.plot(x1_boundary, y_boundary, color='red', linestyle='--', label='Wiggly Boundary')
+
+plt.title('Synthetic Dataset with Wiggly Classification Boundary')
+plt.xlabel('x1')
+plt.ylabel('x2')
+plt.grid(True, linestyle=':', alpha=0.6)
+plt.legend(handles=scatter.legend_elements()[0], labels=['Class 0', 'Class 1'], title="Class")
+plt.show()
+
+print("\n--- Synthetic Data Plot Generated ---")
+```
 
 
+```{python}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt # Still needed for future plotting
 
-## 2b. Key Drivers Analysis
+# Generate the synthetic TEST dataset
+np.random.seed(99) # Use a different seed for the test set
+n_test = 100 # Number of test data points
 
-_todo: replicate the table on slide 75 of the session 5 slides. Specifically, using the dataset provided in the file data_for_drivers_analysis.csv, calculate: pearson correlations, standardized regression coefficients, "usefulness", Shapley values for a linear regression, Johnson's relative weights, and the mean decrease in the gini coefficient from a random forest. You may use packages built into R or Python; you do not need to perform these calculations "by hand."_
+x1_test = np.random.uniform(-3, 3, n_test)
+x2_test = np.random.uniform(-3, 3, n_test)
 
-_If you want a challenge, add additional measures to the table such as the importance scores from XGBoost, from a Neural Network, or from any additional method that measures the importance of variables._
+# Define the wiggly boundary (same as for training data)
+boundary_test = np.sin(4 * x1_test) + x1_test
+y_test = np.where(x2_test > boundary_test, 1, 0) # y is 1 if x2 > boundary, 0 otherwise
+
+# Create a DataFrame for the test set
+synthetic_test_data = pd.DataFrame({'x1': x1_test, 'x2': x2_test, 'y': y_test})
+
+print("First 5 rows of the synthetic TEST dataset:")
+print(synthetic_test_data.head())
+
+print(f"\nShape of the synthetic test dataset: {synthetic_test_data.shape}")
+print(f"Counts of classes in 'y' for test set:\n{synthetic_test_data['y'].value_counts()}")
+```
+
+```{python}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# --- Re-generate Training Data (due to independent code blocks) ---
+np.random.seed(42)
+n = 100
+x1_train = np.random.uniform(-3, 3, n)
+x2_train = np.random.uniform(-3, 3, n)
+boundary_train = np.sin(4 * x1_train) + x1_train
+y_train = np.where(x2_train > boundary_train, 1, 0)
+train_data = pd.DataFrame({'x1': x1_train, 'x2': x2_train, 'y': y_train})
+
+# Extract features and labels for training
+X_train = train_data[['x1', 'x2']].values
+y_train_labels = train_data['y'].values
+
+# --- Re-generate Test Data (due to independent code blocks) ---
+np.random.seed(99)
+n_test = 100
+x1_test = np.random.uniform(-3, 3, n_test)
+x2_test = np.random.uniform(-3, 3, n_test)
+boundary_test = np.sin(4 * x1_test) + x1_test
+y_test_true = np.where(x2_test > boundary_test, 1, 0)
+test_data = pd.DataFrame({'x1': x1_test, 'x2': x2_test, 'y': y_test_true})
+
+# Extract features for testing
+X_test = test_data[['x1', 'x2']].values
+
+# --- Custom KNN Implementation ---
+
+def euclidean_distance(point1, point2):
+    """Calculates the Euclidean distance between two points."""
+    return np.sqrt(np.sum((point1 - point2)**2))
+
+def get_k_nearest_neighbors(X_train, y_train_labels, test_point, k):
+    """
+    Finds the k nearest neighbors to a given test_point from the training data.
+    Returns a list of (distance, label) for the k nearest neighbors.
+    """
+    distances = []
+    for i, train_point in enumerate(X_train):
+        dist = euclidean_distance(test_point, train_point)
+        distances.append((dist, y_train_labels[i]))
+    
+    # Sort by distance and get the k smallest
+    distances.sort(key=lambda x: x[0])
+    k_nearest = distances[:k]
+    return k_nearest
+
+def knn_predict(X_train, y_train_labels, X_test, k):
+    """
+    Makes predictions for a set of test points using the KNN algorithm.
+    """
+    predictions = []
+    for test_point in X_test:
+        neighbors = get_k_nearest_neighbors(X_train, y_train_labels, test_point, k)
+        
+        # Get labels of the k neighbors
+        neighbor_labels = [neighbor[1] for neighbor in neighbors]
+        
+        # Predict the class based on majority vote
+        # Use np.bincount to count occurrences and argmax to find the most frequent label
+        # Handle ties by choosing the smallest label or first encountered (implicit in bincount)
+        prediction = np.bincount(neighbor_labels).argmax()
+        predictions.append(prediction)
+    return np.array(predictions)
+
+# --- Test the custom KNN implementation with k=5 ---
+k_value_for_test = 5
+custom_knn_predictions = knn_predict(X_train, y_train_labels, X_test, k_value_for_test)
+
+# Calculate accuracy
+accuracy = np.mean(custom_knn_predictions == y_test_true)
+
+print(f"Custom KNN Predictions (first 10) for k={k_value_for_test}:")
+print(custom_knn_predictions[:10])
+
+print(f"\nTrue Test Labels (first 10):")
+print(y_test_true[:10])
+
+print(f"\nAccuracy of Custom KNN for k={k_value_for_test}: {accuracy:.4f}")
+print("\n--- Custom KNN Implementation Test Complete ---")
+```
+
+```{python}
+import numpy as np
+import pandas as pd
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+
+# --- Re-generate Training Data (due to independent code blocks) ---
+np.random.seed(42)
+n = 100
+x1_train = np.random.uniform(-3, 3, n)
+x2_train = np.random.uniform(-3, 3, n)
+boundary_train = np.sin(4 * x1_train) + x1_train
+y_train = np.where(x2_train > boundary_train, 1, 0)
+train_data = pd.DataFrame({'x1': x1_train, 'x2': x2_train, 'y': y_train})
+
+# Extract features and labels for training
+X_train = train_data[['x1', 'x2']].values
+y_train_labels = train_data['y'].values
+
+# --- Re-generate Test Data (due to independent code blocks) ---
+np.random.seed(99)
+n_test = 100
+x1_test = np.random.uniform(-3, 3, n_test)
+x2_test = np.random.uniform(-3, 3, n_test)
+boundary_test = np.sin(4 * x1_test) + x1_test
+y_test_true = np.where(x2_test > boundary_test, 1, 0)
+test_data = pd.DataFrame({'x1': x1_test, 'x2': x2_test, 'y': y_test_true})
+
+# Extract features for testing
+X_test = test_data[['x1', 'x2']].values
+
+# --- Scikit-learn KNN Implementation and Comparison ---
+
+# Define the number of neighbors (k) for direct comparison
+k_value_for_comparison = 5 # Using k=5 as in our custom test
+
+# Initialize and fit Scikit-learn's KNeighborsClassifier
+# Note: n_neighbors corresponds to k
+knn_sklearn = KNeighborsClassifier(n_neighbors=k_value_for_comparison)
+knn_sklearn.fit(X_train, y_train_labels)
+
+# Make predictions on the test set
+sklearn_predictions = knn_sklearn.predict(X_test)
+
+# Calculate accuracy
+sklearn_accuracy = accuracy_score(y_test_true, sklearn_predictions)
+
+print(f"Scikit-learn KNN Predictions (first 10) for k={k_value_for_comparison}:")
+print(sklearn_predictions[:10])
+
+print(f"\nAccuracy of Scikit-learn KNN for k={k_value_for_comparison}: {sklearn_accuracy:.4f}")
+
+# --- Comparison with Custom KNN (for report) ---
+# Assuming 'custom_knn_predictions' was the result from your last run.
+# For direct comparison in the blog post, you'd manually mention the 0.9000 accuracy.
+# To make this code block independent and also perform the custom prediction to compare,
+# we would need to include the custom KNN functions here again.
+# Given the independent block constraint, the best way to compare is to run custom KNN here too.
+
+# --- Re-run custom KNN within this block for direct numerical comparison ---
+def euclidean_distance(point1, point2):
+    return np.sqrt(np.sum((point1 - point2)**2))
+
+def get_k_nearest_neighbors(X_train, y_train_labels, test_point, k):
+    distances = []
+    for i, train_point in enumerate(X_train):
+        dist = euclidean_distance(test_point, train_point)
+        distances.append((dist, y_train_labels[i]))
+    distances.sort(key=lambda x: x[0])
+    k_nearest = distances[:k]
+    return k_nearest
+
+def knn_predict(X_train, y_train_labels, X_test, k):
+    predictions = []
+    for test_point in X_test:
+        neighbors = get_k_nearest_neighbors(X_train, y_train_labels, test_point, k)
+        neighbor_labels = [neighbor[1] for neighbor in neighbors]
+        prediction = np.bincount(neighbor_labels).argmax()
+        predictions.append(prediction)
+    return np.array(predictions)
+
+custom_knn_predictions_current_block = knn_predict(X_train, y_train_labels, X_test, k_value_for_comparison)
+custom_accuracy_current_block = accuracy_score(y_test_true, custom_knn_predictions_current_block)
+
+print(f"\nAccuracy of Custom KNN for k={k_value_for_comparison} (re-calculated in this block): {custom_accuracy_current_block:.4f}")
+
+print("\n--- Scikit-learn KNN Validation Complete ---")
+```
+
+```{python}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+
+# --- Re-generate Training Data (due to independent code blocks) ---
+np.random.seed(42)
+n = 100
+x1_train = np.random.uniform(-3, 3, n)
+x2_train = np.random.uniform(-3, 3, n)
+boundary_train = np.sin(4 * x1_train) + x1_train
+y_train = np.where(x2_train > boundary_train, 1, 0)
+train_data = pd.DataFrame({'x1': x1_train, 'x2': x2_train, 'y': y_train})
+
+# Extract features and labels for training
+X_train = train_data[['x1', 'x2']].values
+y_train_labels = train_data['y'].values
+
+# --- Re-generate Test Data (due to independent code blocks) ---
+np.random.seed(99)
+n_test = 100
+x1_test = np.random.uniform(-3, 3, n_test)
+x2_test = np.random.uniform(-3, 3, n_test)
+boundary_test = np.sin(4 * x1_test) + x1_test
+y_test_true = np.where(x2_test > boundary_test, 1, 0)
+test_data = pd.DataFrame({'x1': x1_test, 'x2': x2_test, 'y': y_test_true})
+
+# Extract features for testing
+X_test = test_data[['x1', 'x2']].values
+
+# --- Evaluate KNN for k=1 to k=30 ---
+k_values = range(1, 31) # K from 1 to 30
+accuracies = []
+
+for k in k_values:
+    # Use Scikit-learn's KNeighborsClassifier for efficiency in this loop
+    knn = KNeighborsClassifier(n_neighbors=k)
+    knn.fit(X_train, y_train_labels)
+    predictions = knn.predict(X_test)
+    accuracy = accuracy_score(y_test_true, predictions)
+    accuracies.append(accuracy)
+
+# Find the optimal k
+optimal_k_index = np.argmax(accuracies)
+optimal_k = k_values[optimal_k_index]
+max_accuracy = accuracies[optimal_k_index]
+
+print(f"Accuracies for k=1 to 30:\n{accuracies}")
+print(f"\nOptimal k: {optimal_k} with accuracy: {max_accuracy:.4f}")
+
+# --- Plotting the results ---
+plt.figure(figsize=(12, 7))
+plt.plot(k_values, accuracies, marker='o', linestyle='-', color='skyblue')
+plt.title('KNN Classification Accuracy vs. Number of Neighbors (k)')
+plt.xlabel('Number of Neighbors (k)')
+plt.ylabel('Percentage of Correctly Classified Points (Accuracy)')
+plt.xticks(k_values[::2]) # Show every other k value on x-axis for readability
+plt.grid(True, linestyle='--', alpha=0.7)
+
+# Highlight the optimal k
+plt.axvline(x=optimal_k, color='red', linestyle=':', label=f'Optimal k = {optimal_k} (Accuracy: {max_accuracy:.3f})')
+plt.legend()
+plt.show()
+
+print("\n--- KNN Accuracy Plot Generated ---")
+```
+
+In this section, we delved into K-Nearest Neighbors (KNN), a powerful instance-based supervised learning algorithm. Our objective was to classify data points based on their proximity to labeled training examples. To rigorously test our understanding and implementation, we first generated a challenging synthetic dataset. This dataset featured two continuous input variables (x1, x2) and a binary outcome (y) defined by a complex, non-linear "wiggly boundary," simulating a scenario where traditional linear classifiers would struggle. This visualization of the data underscored the need for a flexible model capable of adapting to intricate decision surfaces.
+
+We then proceeded to implement the KNN algorithm entirely from scratch, meticulously coding the functions required for calculating Euclidean distances between points, identifying the k nearest neighbors for any given observation, and performing classification based on a majority vote among those neighbors. This hands-on exercise provided deep insights into KNN's core mechanics. To validate our custom implementation, we compared its predictions and accuracy against Scikit-learn's optimized KNeighborsClassifier. The results were highly consistent, with both implementations achieving an identical accuracy of 0.9000 when k=5, thereby confirming the correctness and reliability of our manual code.
+
+Finally, a critical step in deploying any KNN model is selecting the optimal k value. We systematically evaluated the model's performance across a range of k values, from 1 to 30, plotting the classification accuracy for each. Our analysis revealed that for this particular wiggly dataset, k=1 yielded the highest accuracy at 0.9200. This suggests that, given the localized and intricate nature of the decision boundary, relying on the single closest neighbor provides the most accurate classification, as averaging across more distant neighbors could smooth out the fine details required for correct prediction. This comprehensive exploration of KNN highlights its versatility and the importance of parameter tuning for optimal performance.
+
 
 
 

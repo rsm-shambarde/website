@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Your Name">
+<meta name="dcterms.date" content="2025-06-10">
 
-<title>My Projects – Sumedh’s Blog</title>
+<title>Add Title – Sumedh’s Blog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +22,59 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-ff4371ef257df69894857e99c6ad0d06.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-7e9cb23fbaac0247e1712d9340a79e12.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ff4371ef257df69894857e99c6ad0d06.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-7e9cb23fbaac0247e1712d9340a79e12.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,35 +102,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-title','listing-author','listing-date','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -128,7 +133,7 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
 <body class="nav-fixed">
@@ -138,7 +143,7 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Sumedh’s Blog</span>
     </a>
   </div>
@@ -149,11 +154,11 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./projects.html" aria-current="page"> 
+    <a class="nav-link" href="../../projects.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
 </ul>
@@ -167,22 +172,43 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#a.-k-means" id="toc-a.-k-means" class="nav-link active" data-scroll-target="#a.-k-means">1a. K-Means</a></li>
+  <li><a href="#b.-latent-class-mnl" id="toc-b.-latent-class-mnl" class="nav-link" data-scroll-target="#b.-latent-class-mnl">1b. Latent-Class MNL</a></li>
+  <li><a href="#a.-k-nearest-neighbors" id="toc-a.-k-nearest-neighbors" class="nav-link" data-scroll-target="#a.-k-nearest-neighbors">2a. K Nearest Neighbors</a></li>
+  <li><a href="#b.-key-drivers-analysis" id="toc-b.-key-drivers-analysis" class="nav-link" data-scroll-target="#b.-key-drivers-analysis">2b. Key Drivers Analysis</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">My Projects</h1>
+<h1 class="title">Add Title</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Your Name </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 10, 2025</p>
+    </div>
+  </div>
   
     
   </div>
@@ -192,98 +218,51 @@ window.Quarto = {
 </header>
 
 
-
-
-
-
-<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
-<div class="list grid quarto-listing-cols-3">
-
-<div class="g-col-1" data-index="0" data-listing-date-sort="1749538800000" data-listing-file-modified-sort="1745572334783" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="44" data-listing-word-count-sort="8729">
-<a href="./projects/project1/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-
-<p class="card-img-top"><img src="projects/project1/additionalParagraph.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">A Replication of Karlan and List (2007)</h5>
-
-<div class="card-text listing-description delink">Dean Karlan at Yale and John List at the University of Chicago conducted a field experiment to test the effectiveness of different fundraising letters. They sent out 50,000…<em></em></div>
-
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">Sumedh Hambarde</div>
-<div class="listing-date">Jun 10, 2025</div>
+<p><em>todo: do two analyses. Do one of either 1a or 1b, AND one of either 2a or 2b.</em></p>
+<section id="a.-k-means" class="level2">
+<h2 class="anchored" data-anchor-id="a.-k-means">1a. K-Means</h2>
+<p><em>todo: write your own code to implement the k-means algorithm. Make plots of the various steps the algorithm takes so you can “see” the algorithm working. Test your algorithm on the Palmer Penguins dataset, specifically using the bill length and flipper length variables. Compare your results to the built-in <code>kmeans</code> function in R or Python.</em></p>
+<p><em>todo: Calculate both the within-cluster-sum-of-squares and silhouette scores (you can use built-in functions to do so) and plot the results for various numbers of clusters (ie, K=2,3,…,7). What is the “right” number of clusters as suggested by these two metrics?</em></p>
+<p><em>If you want a challenge, add your plots as an animated gif on your website so that the result looks something like <a href="https://www.youtube.com/shorts/XCsoWZU9oN8">this</a>.</em></p>
+</section>
+<section id="b.-latent-class-mnl" class="level2">
+<h2 class="anchored" data-anchor-id="b.-latent-class-mnl">1b. Latent-Class MNL</h2>
+<p><em>todo: Use the Yogurt dataset to estimate a latent-class MNL model. This model was formally introduced in the paper by Kamakura &amp; Russell (1989); you may want to read or reference page 2 of the pdf, which is described in the class slides, session 4, slides 56-57.</em></p>
+<p><em>The data provides anonymized consumer identifiers (<code>id</code>), a vector indicating the chosen product (<code>y1</code>:<code>y4</code>), a vector indicating if any products were “featured” in the store as a form of advertising (<code>f1</code>:<code>f4</code>), and the products’ prices in price-per-ounce (<code>p1</code>:<code>p4</code>). For example, consumer 1 purchased yogurt 4 at a price of 0.079/oz and none of the yogurts were featured/advertised at the time of consumer 1’s purchase. Consumers 2 through 7 each bought yogurt 2, etc. You may want to reshape the data from its current “wide” format into a “long” format.</em></p>
+<p><em>todo: Fit the standard MNL model on these data. Then fit the latent-class MNL on these data separately for 2, 3, 4, and 5 latent classes.</em></p>
+<p><em>todo: How many classes are suggested by the <span class="math inline">\(BIC = -2*\ell_n  + k*log(n)\)</span>? (where <span class="math inline">\(\ell_n\)</span> is the log-likelihood, <span class="math inline">\(n\)</span> is the sample size, and <span class="math inline">\(k\)</span> is the number of parameters.) The Bayesian-Schwarz Information Criterion <a href="https://en.wikipedia.org/wiki/Bayesian_information_criterion">link</a> is a metric that assess the benefit of a better log likelihood at the expense of additional parameters to estimate – akin to the adjusted R-squared for the linear regression model. Note, that a <strong>lower</strong> BIC indicates a better model fit, accounting for the number of parameters in the model.</em></p>
+<p><em>todo: compare the parameter estimates between (1) the aggregate MNL, and (2) the latent-class MNL with the number of classes suggested by the BIC.</em></p>
+</section>
+<section id="a.-k-nearest-neighbors" class="level2">
+<h2 class="anchored" data-anchor-id="a.-k-nearest-neighbors">2a. K Nearest Neighbors</h2>
+<p><em>todo: use the following code (or the python equivalent) to generate a synthetic dataset for the k-nearest neighbors algorithm. The code generates a dataset with two features, <code>x1</code> and <code>x2</code>, and a binary outcome variable <code>y</code> that is determined by whether <code>x2</code> is above or below a wiggly boundary defined by a sin function.</em></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># gen data -----</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">cbind</span>(x1, x2)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># define a wiggly boundary</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>boundary <span class="ot">&lt;-</span> <span class="fu">sin</span>(<span class="dv">4</span><span class="sc">*</span>x1) <span class="sc">+</span> x1</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(x2 <span class="sc">&gt;</span> boundary, <span class="dv">1</span>, <span class="dv">0</span>) <span class="sc">|&gt;</span> <span class="fu">as.factor</span>()</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x1 =</span> x1, <span class="at">x2 =</span> x2, <span class="at">y =</span> y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p><em>todo: plot the data where the horizontal axis is <code>x1</code>, the vertical axis is <code>x2</code>, and the points are colored by the value of <code>y</code>. You may optionally draw the wiggly boundary.</em></p>
+<p><em>todo: generate a test dataset with 100 points, using the same code as above but with a different seed.</em></p>
+<p><em>todo: implement KNN by hand. Check you work with a built-in function – eg, <code>class::knn()</code> or <code>caret::train(method="knn")</code> in R, or scikit-learn’s <code>KNeighborsClassifier</code> in Python.</em></p>
+<p><em>todo: run your function for k=1,…,k=30, each time noting the percentage of correctly-classified points from the test dataset. Plot the results, where the horizontal axis is 1-30 and the vertical axis is the percentage of correctly-classified points. What is the optimal value of k as suggested by your plot?</em></p>
+</section>
+<section id="b.-key-drivers-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="b.-key-drivers-analysis">2b. Key Drivers Analysis</h2>
+<p><em>todo: replicate the table on slide 75 of the session 5 slides. Specifically, using the dataset provided in the file data_for_drivers_analysis.csv, calculate: pearson correlations, standardized regression coefficients, “usefulness”, Shapley values for a linear regression, Johnson’s relative weights, and the mean decrease in the gini coefficient from a random forest. You may use packages built into R or Python; you do not need to perform these calculations “by hand.”</em></p>
+<p><em>If you want a challenge, add additional measures to the table such as the importance scores from XGBoost, from a Neural Network, or from any additional method that measures the importance of variables.</em></p>
 
-</div>
 
-</div></a></div>
+</section>
 
-<div class="g-col-1" data-index="1" data-listing-date-sort="1749538800000" data-listing-file-modified-sort="1749545831645" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="735">
-<a href="./projects/project4/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-
-<div class="listing-item-img-placeholder card-img-top" style="height: 150px;">&nbsp;</div>
-
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">Add Title</h5>
-
-<div class="card-text listing-description delink"><em>todo: do two analyses. Do one of either 1a or 1b, AND one of either 2a or 2b.</em></div>
-
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">Your Name</div>
-<div class="listing-date">Jun 10, 2025</div>
-</div>
-
-</div>
-
-</div></a></div>
-
-<div class="g-col-1" data-index="2" data-listing-date-sort="1749538800000" data-listing-file-modified-sort="1748669243806" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="23" data-listing-word-count-sort="4509">
-<a href="./projects/project3/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-
-<p class="card-img-top"><img src="projects/project3/index_files/figure-html/unnamed-chunk-4-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">Multinomial Logit Model</h5>
-
-<div class="card-text listing-description delink">This assignment expores two methods for estimating the MNL model: (1) via Maximum Likelihood, and (2) via a Bayesian approach using a Metropolis-Hastings MCMC algorithm.</div>
-
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">Sumedh Hambarde</div>
-<div class="listing-date">Jun 10, 2025</div>
-</div>
-
-</div>
-
-</div></a></div>
-
-<div class="g-col-1" data-index="3" data-listing-date-sort="1749538800000" data-listing-file-modified-sort="1746678214823" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="22" data-listing-word-count-sort="4308">
-<a href="./projects/project2/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-
-<p class="card-img-top"><img src="projects/project2/index_files/figure-html/cell-2-output-2.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">Poisson Regression Examples</h5>
-
-<div class="card-text listing-description delink">Blueprinty is a small firm that makes software for developing blueprints specifically for submitting patent applications to the US patent office. Their marketing team would…</div>
-
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">Sumedh Hambarde</div>
-<div class="listing-date">Jun 10, 2025</div>
-</div>
-
-</div>
-
-</div></a></div>
-
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

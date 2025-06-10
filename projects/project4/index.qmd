@@ -197,69 +197,66 @@ def run_kmeans(data, k, max_iterations=100, random_state=None):
 k_value = 3
 final_centroids, final_labels, iteration_states = run_kmeans(features, k_value, random_state=42)
 
-# --- Visualization Part ---
-# Set up the plot for animation
-fig, ax = plt.subplots(figsize=(8, 6))
+# --- Visualization Part (Revised to generate separate plots) ---
+# Ensure all necessary imports are at the top of the entire code block
+# import numpy as np # Already present in the full block
+# import pandas as pd # Already present
+# import matplotlib.pyplot as plt # Already present
+# import matplotlib.animation as animation # Already present
+# from IPython.display import HTML # Already present
+
+# IMPORTANT: The K-Means functions and the call to run_kmeans(features, k_value, random_state=42)
+# should still be present ABOVE this visualization section within the SAME code block
+# as they provide the 'iteration_states' variable.
 
 # Define colors for clusters
 colors = ['purple', 'green', 'blue', 'orange', 'red', 'brown', 'pink']
-# Use unique colors up to K_MAX if you decide to make a single animation for different Ks later
-# For now, K=3, so 3 colors are enough.
 
-# Helper function to update the plot for each frame
-def update(frame):
-    ax.clear()
-    current_state = iteration_states[frame]
-    current_centroids = current_state['centroids']
-    current_labels = current_state['labels']
-    iteration = current_state['iteration']
+# Helper function to create and update a single plot
+def plot_kmeans_state(state, k_value, features, colors, title_prefix="K-Means"):
+    fig, ax = plt.subplots(figsize=(8, 6)) # Create a NEW figure and axes for each plot
+
+    current_centroids = state['centroids']
+    current_labels = state['labels']
+    iteration = state['iteration']
+
     # Plot data points colored by cluster
     for i in range(k_value):
         points_in_cluster = features.values[current_labels == i]
         ax.scatter(points_in_cluster[:, 0], points_in_cluster[:, 1],
                    color=colors[i], label=f'Cluster {i+1}', s=50, alpha=0.6)
+    
     # Plot centroids
     ax.scatter(current_centroids[:, 0], current_centroids[:, 1],
                marker='X', s=200, color='black', edgecolor='white', linewidth=2, label='Centroids')
-    ax.set_title(f"K-Means Iteration {iteration + 1}")
+
+    ax.set_title(f"{title_prefix}: Iteration {iteration + 1}")
     ax.set_xlabel("Bill Length (mm)")
     ax.set_ylabel("Flipper Length (mm)")
     ax.legend(loc='upper left', bbox_to_anchor=(1,1)) # Place legend outside
     ax.grid(True, linestyle='--', alpha=0.7)
     ax.set_xlim(features['bill_length_mm'].min() - 1, features['bill_length_mm'].max() + 1)
     ax.set_ylim(features['flipper_length_mm'].min() - 5, features['flipper_length_mm'].max() + 5)
+    plt.tight_layout(rect=[0, 0, 0.85, 1]) # Adjust layout to make room for legend
+    plt.show() # Display this specific plot
 
-
-# Create the animation
-# frames = len(iteration_states)
-# If your environment supports GIF, use this:
-# anim = animation.FuncAnimation(fig, update, frames=frames, interval=800, repeat=False)
-# plt.close() # Prevents extra static plot from appearing
-
-# To save as GIF or display in Quarto, additional setup might be needed
-# For now, let's just show the final plot and perhaps a few intermediate ones as static images
-# or simplify to just showing the animation object which Quarto might render.
-
-# As Quarto environments can vary in animation rendering, let's output a few key frames as static plots
-# and mention the possibility of GIF.y
+# --- Plotting Static Frames ---
 print("\nGenerating static plots for key K-Means iterations:")
+
 # Plot initial state (Iteration 1)
-update(0)
-plt.suptitle("K-Means: Initial State (Iteration 1)", y=1.02) # Add super title above plot title
-plt.tight_layout(rect=[0, 0, 0.85, 1]) # Adjust layout to make room for legend
-plt.show()
-# Plot an intermediate state (e.g., halfway through)
+plot_kmeans_state(iteration_states[0], k_value, features, colors, "K-Means: Initial State")
+
+# Plot an intermediate state
 if len(iteration_states) > 1:
-    mid_frame_idx = (len(iteration_states) // 2) -1 if len(iteration_states) > 2 else 0 # Adjust for 0-indexing and minimum 2 states
-    update(mid_frame_idx)
-    plt.suptitle(f"K-Means: Intermediate State (Iteration {mid_frame_idx + 1})", y=1.02)
-    plt.tight_layout(rect=[0, 0, 0.85, 1])
-    plt.show()
+    mid_frame_idx = (len(iteration_states) // 2) if len(iteration_states) > 1 else 0
+    if mid_frame_idx >= len(iteration_states):
+        mid_frame_idx = len(iteration_states) - 1
+    
+    plot_kmeans_state(iteration_states[mid_frame_idx], k_value, features, colors, f"K-Means: Intermediate State (Iteration {mid_frame_idx + 1})")
+
 # Plot the final state (Converged Iteration)
-update(len(iteration_states) - 1)
-plt.suptitle(f"K-Means: Final Converged State (Iteration {len(iteration_states)})", y=1.02)
-plt.tight_layout(rect=[0, 0, 0.85, 1])
-plt.show()
+plot_kmeans_state(iteration_states[len(iteration_states) - 1], k_value, features, colors, f"K-Means: Final Converged State (Iteration {len(iteration_states)})")
+
 print("\n--- Visualizations generated ---")
 ```
 ### Validating with Scikit-learn's K-means
